@@ -41,7 +41,7 @@ namespace TeachingDb
 
                 //    }).Where(cId => cId.Trida == "8.A");
 
-                var firstJoin = db.Students.Join(db.Subject2Students,
+                var joined = db.Students.Join(db.Subject2Students,
                     st => st.Id,
                     s2s => s2s.StudentId,
                     (st, s2s) => new
@@ -57,68 +57,19 @@ namespace TeachingDb
                                         SubjectName = sb.Name
                                     }).ToList();
 
-                var grouped = firstJoin.GroupBy(n => n.StudentName).ToList();
+                var grouped = joined.GroupBy(n => n.StudentName).ToList();
 
-                var final = grouped.Select(
+                var aggregated = grouped.Select(
                     s => new
                     {
                         StudentName = s.Key,
                         Subjects = s.Select(sb => sb.SubjectName).Aggregate((a, b) => $"{a},{b}")
                     }).ToList();
 
-                foreach (var s in final)
+                foreach (var s in aggregated)
                 {
                     Console.WriteLine($"{s.StudentName} {s.Subjects}");
                 }
-
-
-
-
-
-
-
-
-
-
-                //    var joined = db.Students
-                //        .Join(db.Subject2Students,
-                //            s => s.Id,
-                //            s2s => s2s.StudentId,
-                //            (s, s2s) => new
-                //            {
-                //                FullName = s.Name + " " + s.Surname,
-                //                SubjectId = s2s.SubjectId
-                //            })
-                //        .Join(db.Subjects,
-                //            a => a.SubjectId,
-                //            s => s.Id,
-                //            (a, s) => new
-                //            {
-                //                FullName = a.FullName,
-                //                SubjectName = s.Name
-
-                //            })
-                //        .ToList();
-
-                //    var joinedSecond = joined
-                //         .GroupBy(s => s.SubjectName);
-
-
-                //    var joinedThird = joinedSecond
-                //        .Select(s => new
-                //        {
-                //            SubjectName = s.Key,
-                //            Students = s.Select(a => a.FullName).Aggregate((a, b) => $"{a},{b}")
-                //        });
-                //}
-
-
-                //var numbers = new List<int> { 1, 2, 4, 3, 2 };
-
-                //var counted = numbers.Aggregate((a, b) => a + b);
-
-
-                //Console.ReadLine();
             }
         }
     }
